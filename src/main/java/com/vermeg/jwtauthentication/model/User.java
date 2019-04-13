@@ -56,6 +56,9 @@ public class User{
     	joinColumns = @JoinColumn(name = "user_id"), 
     	inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
+    
+    @ManyToMany(mappedBy="assignee")
+    private Set<Task> tasks;
 
     public User() {}
 
@@ -66,7 +69,15 @@ public class User{
         this.password = password;
     }
 
-    public Long getId() {
+    public Set<Task> getTasks() {
+		return tasks;
+	}
+
+	public void setTasks(Set<Task> tasks) {
+		this.tasks = tasks;
+	}
+
+	public Long getId() {
         return id;
     }
 
