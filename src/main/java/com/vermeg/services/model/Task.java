@@ -23,12 +23,17 @@ import javax.validation.constraints.NotNull;
 
 import com.vermeg.services.util.Constants;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 @Entity
 @Table(name = "task")
+@ApiModel(description = "All details about the Task model.")
 public class Task {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@ApiModelProperty(position=0)
 	private Long id;
 
 	@Column(unique = true)
@@ -131,5 +136,22 @@ public class Task {
 
 	public void setAssignee(Set<User> assignee) {
 		this.assignee = assignee;
+	}
+
+	public Task(Long id, @NotNull String label, @NotNull Priority priority, @NotNull Date startDate,
+			@NotNull Date endDate, @NotNull Estimation originalEstimation, Estimation remainingEstimation,
+			@NotNull Set<User> assignee) {
+		super();
+		this.id = id;
+		this.label = label;
+		this.priority = priority;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.originalEstimation = originalEstimation;
+		this.remainingEstimation = remainingEstimation;
+		this.assignee = assignee;
+	}
+
+	public Task() {
 	}
 }
