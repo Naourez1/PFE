@@ -1,0 +1,12 @@
+#ignore all files in target folder
+/target/
+
+#ignore all .class files
+*.class
+
+#ignore .project and .classpath files
+.project
+.classpath
+
+#ignore settings folder
+/.settings
