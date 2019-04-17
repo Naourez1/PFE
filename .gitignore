@@ -10,3 +10,6 @@
 
 #ignore settings folder
 /.settings
+
+#ignore application.properties
+application.properties
