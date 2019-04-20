@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.vermeg.services.cofiguration.api.PrefixedRestController;
 import com.vermeg.services.dto.UserDataDTO;
 import com.vermeg.services.dto.UserResponseDTO;
 import com.vermeg.services.model.User;
@@ -30,9 +32,7 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
-@RestController
-@RequestMapping("/api")
-@CrossOrigin("*")
+@PrefixedRestController
 @Api(tags = "users")
 public class UserController {
 
@@ -114,7 +114,7 @@ public class UserController {
 			@ApiResponse(code = 403, message = "Access denied"), //
 			@ApiResponse(code = 404, message = "The user doesn't exist"), //
 			@ApiResponse(code = 500, message = "Expired or invalid JWT token") })
-	public UserResponseDTO updateUser(@RequestBody UserDataDTO user) {
+	public UserResponseDTO updateUser(@RequestBody @Valid UserDataDTO user) {
 		return modelMapper.map(userService.save(modelMapper.map(user, User.class)), UserResponseDTO.class);
 	}
 

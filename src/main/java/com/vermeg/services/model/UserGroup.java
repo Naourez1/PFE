@@ -10,6 +10,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+
+import org.springframework.lang.NonNull;
 
 @Entity
 @Table(name = "user_group")
@@ -19,6 +22,7 @@ public class UserGroup {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Long id;
 
+	@NotBlank
 	private String name;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "userGroup", fetch = FetchType.LAZY)

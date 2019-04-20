@@ -56,7 +56,6 @@ public class User {
 
 	@ManyToOne
 	@JoinColumn(name = "group_id")
-	@Size(max = 50)
 	private UserGroup userGroup;
 
 	public User() {

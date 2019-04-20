@@ -1,4 +1,4 @@
-package com.vermeg.services.cofiguration;
+package com.vermeg.services.cofiguration.swagger;
 
 import java.util.ArrayList;
 import java.util.Arrays;
