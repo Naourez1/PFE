@@ -28,12 +28,10 @@ import io.swagger.annotations.ApiModelProperty;
 
 @Entity
 @Table(name = "task")
-@ApiModel(description = "All details about the Task model.")
 public class Task {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
-	@ApiModelProperty(position=0)
 	private Long id;
 
 	@Column(unique = true)

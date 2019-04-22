@@ -17,22 +17,16 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-
 @Entity
 @Table(name = "sprint")
-@ApiModel(description = "All details about the Sprint model.")
 public class Sprint {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
-	@ApiModelProperty(position = 0)
 	private Long id;
 
 	@Column(unique = true)
 	@NotNull
-	@ApiModelProperty(position = 1)
 	private String label;
 	
 	@NotNull
