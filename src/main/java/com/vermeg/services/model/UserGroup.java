@@ -12,8 +12,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
-import org.springframework.lang.NonNull;
-
 @Entity
 @Table(name = "user_group")
 public class UserGroup {
