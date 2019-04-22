@@ -1,52 +1,34 @@
 package com.vermeg.services.model;
 
-import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
 @Entity
-@Table(name = "sprint")
-@ApiModel(description = "All details about the Sprint model.")
-public class Sprint {
+@Table(name = "productBacklog")
+@ApiModel(description = "All details about the ProductBacklog model.")
 
+public class ProductBacklog {
+	
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
-	@ApiModelProperty(position = 0)
+	@ApiModelProperty(position=0)
 	private Long id;
 
 	@Column(unique = true)
 	@NotNull
-	@ApiModelProperty(position = 1)
 	private String label;
 	
-	@NotNull
-	@Enumerated(EnumType.STRING)
-	private Priority priority;
-	
-	@NotNull
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date startDate;
-
-	@NotNull
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date endDate;
-
 	@NotNull
 	@OneToOne
 	@JoinColumn(name = "originalEstimation_id", referencedColumnName = "id")
@@ -54,7 +36,6 @@ public class Sprint {
 
 	@Transient
 	private Estimation remainingEstimation;
-	
 
 	public Long getId() {
 		return id;
@@ -70,40 +51,6 @@ public class Sprint {
 
 	public void setLabel(String label) {
 		this.label = label;
-	}
-
-	public Sprint(Long id, @NotNull String label) {
-		super();
-		this.id = id;
-		this.label = label;
-	}
-
-	public Sprint() {
-		super();
-	}
-
-	public Priority getPriority() {
-		return priority;
-	}
-
-	public void setPriority(Priority priority) {
-		this.priority = priority;
-	}
-
-	public Date getStartDate() {
-		return startDate;
-	}
-
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
-	}
-
-	public Date getEndDate() {
-		return endDate;
-	}
-
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
 	}
 
 	public Estimation getOriginalEstimation() {
