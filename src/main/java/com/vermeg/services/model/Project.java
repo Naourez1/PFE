@@ -29,6 +29,20 @@ public class Project {
 	@NotNull
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date startDate;
+	
+	@NotNull
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date endDate;
+
+	@NotNull
+	@Enumerated(EnumType.STRING)
+	private Status status;
+	
+	
+	@NotNull
+	private String description;
+	
+	
 
 	public Long getId() {
 		return id;
@@ -70,11 +84,5 @@ public class Project {
 		this.status = status;
 	}
 
-	@NotNull
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date endDate;
-
-	@NotNull
-	@Enumerated(EnumType.STRING)
-	private Status status;
+	
 }

@@ -21,24 +21,29 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 @Entity
-@Table(name = "sprint")
-@ApiModel(description = "All details about the Sprint model.")
-public class Sprint {
+@Table(name = "plannification")
+@ApiModel(description = "All details about the Plannification model.")
+
+public class Plannification {
+
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
-	@ApiModelProperty(position = 0)
+	@ApiModelProperty(position=0)
 	private Long id;
 
 	@Column(unique = true)
 	@NotNull
-	@ApiModelProperty(position = 1)
 	private String label;
 	
+	
+	@NotNull
+	private String desription;
+
 	@NotNull
 	@Enumerated(EnumType.STRING)
 	private Priority priority;
-	
+
 	@NotNull
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date startDate;
@@ -54,7 +59,6 @@ public class Sprint {
 
 	@Transient
 	private Estimation remainingEstimation;
-	
 
 	public Long getId() {
 		return id;
@@ -72,14 +76,12 @@ public class Sprint {
 		this.label = label;
 	}
 
-	public Sprint(Long id, @NotNull String label) {
-		super();
-		this.id = id;
-		this.label = label;
+	public String getDesription() {
+		return desription;
 	}
 
-	public Sprint() {
-		super();
+	public void setDesription(String desription) {
+		this.desription = desription;
 	}
 
 	public Priority getPriority() {
@@ -122,4 +124,6 @@ public class Sprint {
 		this.remainingEstimation = remainingEstimation;
 	}
 
+	
+	
 }
