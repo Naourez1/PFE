@@ -8,6 +8,8 @@ import javax.validation.Valid;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,17 +22,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.vermeg.services.cofiguration.api.PrefixedRestController;
 import com.vermeg.services.dto.UserDataDTO;
 import com.vermeg.services.dto.UserResponseDTO;
+import com.vermeg.services.model.Task;
 import com.vermeg.services.model.User;
 import com.vermeg.services.services.UserService;
 
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
 @PrefixedRestController
-@Api(tags = "users")
 public class UserController {
 
 	@Autowired
@@ -40,7 +41,7 @@ public class UserController {
 	private ModelMapper modelMapper;
 
 	@PostMapping("/auth/signin")
-	@ApiOperation(value = "${UserController.signin}")
+	@ApiOperation(value = "${UserController.signin}", produces = "text/plain")
 	@ApiResponses(value = { //
 			@ApiResponse(code = 400, message = "Something went wrong"), //
 			@ApiResponse(code = 422, message = "Invalid username/password supplied") })
@@ -51,7 +52,7 @@ public class UserController {
 	}
 
 	@PostMapping("/auth/signup")
-	@ApiOperation(value = "${UserController.signup}")
+	@ApiOperation(value = "${UserController.signup}", produces = "text/plain")
 	@ApiResponses(value = { //
 			@ApiResponse(code = 400, message = "Something went wrong"), //
 			@ApiResponse(code = 403, message = "Access denied"), //
@@ -63,9 +64,10 @@ public class UserController {
 
 	@DeleteMapping(value = "/user/{id}")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@ApiOperation(value = "${UserController.delete}")
+	@ApiOperation(value = "${UserController.delete}", produces = "text/plain")
 	@ApiResponses(value = { //
 			@ApiResponse(code = 400, message = "Something went wrong"), //
+			@ApiResponse(code = 401, message = "You are not authorized to access this information"),
 			@ApiResponse(code = 403, message = "Access denied"), //
 			@ApiResponse(code = 404, message = "The user doesn't exist"), //
 			@ApiResponse(code = 500, message = "Expired or invalid JWT token") })
@@ -76,9 +78,10 @@ public class UserController {
 
 	@GetMapping(value = "/user/{id}")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@ApiOperation(value = "${UserController.search}", response = UserResponseDTO.class)
+	@ApiOperation(value = "${UserController.search}", response = UserResponseDTO.class, produces = "application/json")
 	@ApiResponses(value = { //
 			@ApiResponse(code = 400, message = "Something went wrong"), //
+			@ApiResponse(code = 401, message = "You are not authorized to access this information"),
 			@ApiResponse(code = 403, message = "Access denied"), //
 			@ApiResponse(code = 404, message = "The user doesn't exist"), //
 			@ApiResponse(code = 500, message = "Expired or invalid JWT token") })
@@ -87,8 +90,7 @@ public class UserController {
 	}
 
 	@GetMapping(value = "/me")
-	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_PM')")
-	@ApiOperation(value = "${UserController.me}", response = UserResponseDTO.class)
+	@ApiOperation(value = "${UserController.me}", response = UserResponseDTO.class, produces = "application/json")
 	@ApiResponses(value = { //
 			@ApiResponse(code = 400, message = "Something went wrong"), //
 			@ApiResponse(code = 403, message = "Access denied"), //
@@ -98,14 +100,16 @@ public class UserController {
 	}
 
 	@GetMapping("/refresh")
-	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_PM')")
+	@ApiOperation(value = "${UserController.refresh}", produces = "text/plain")
+	@ApiResponses(value = { //
+			@ApiResponse(code = 400, message = "Something went wrong"), //
+			@ApiResponse(code = 403, message = "Access denied") })
 	public String refresh(HttpServletRequest req) {
 		return userService.refresh(req.getRemoteUser());
 	}
 
 	@PutMapping("/userput")
-	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_PM')")
-	@ApiOperation(value = "${UserController.updateUser}")
+	@ApiOperation(value = "${UserController.updateUser}", response = UserResponseDTO.class, produces = "application/json")
 	@ApiResponses(value = { //
 			@ApiResponse(code = 400, message = "Something went wrong"), //
 			@ApiResponse(code = 403, message = "Access denied"), //
@@ -117,14 +121,24 @@ public class UserController {
 
 	@GetMapping("/users")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@ApiOperation(value = "${UserController.getUsers}", response = UserResponseDTO.class)
+	@ApiOperation(value = "${UserController.getUsers}", response = UserResponseDTO.class, produces = "application/json")
 	@ApiResponses(value = { //
 			@ApiResponse(code = 400, message = "Something went wrong"), //
+			@ApiResponse(code = 401, message = "You are not authorized to access this information"),
 			@ApiResponse(code = 403, message = "Access denied"), //
 			@ApiResponse(code = 500, message = "Expired or invalid JWT token") })
 	public List<UserResponseDTO> getUsers() {
 		return userService.getAll().stream().map(entity -> modelMapper.map(entity, UserResponseDTO.class))
 				.collect(Collectors.toList());
+	}
+
+	@GetMapping("/users/{id}/tasks")
+	@ApiOperation(value = "${UserController.getTasksOfUser}", response = Task.class, produces = "applicatoin/json")
+	@ApiResponses(value = { @ApiResponse(code = 400, message = "Something went wrong"), //
+			@ApiResponse(code = 403, message = "Access denied"), //
+			@ApiResponse(code = 500, message = "Expired or invalid JWT token") })
+	public ResponseEntity<List<Task>> getTasksOfUser(@ApiParam("id") @PathVariable Long id) {
+		return new ResponseEntity<>(userService.getTasksOfUser(id), HttpStatus.FOUND);
 	}
 
 //	@Autowired

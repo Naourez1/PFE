@@ -8,6 +8,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -54,6 +55,11 @@ public class Task {
 	@OneToOne
 	@JoinColumn(name = "originalEstimation_id", referencedColumnName = "id")
 	private Estimation originalEstimation;
+	
+	@NotNull
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "task_assignee", joinColumns = @JoinColumn(name = "task_id"), inverseJoinColumns = @JoinColumn(name = "assignee_id"))
+	private Set<User> assignee;
 
 	@Transient
 	private Estimation remainingEstimation;
@@ -82,11 +88,6 @@ public class Task {
 	public void setEstimation(Estimation estimation) {
 		this.originalEstimation = estimation;
 	}
-
-	@NotNull
-	@ManyToMany
-	@JoinTable(name = "task_assignee", joinColumns = @JoinColumn(name = "task_id"), inverseJoinColumns = @JoinColumn(name = "assignee_id"))
-	private Set<User> assignee;
 
 	public Long getId() {
 		return id;
@@ -136,20 +137,4 @@ public class Task {
 		this.assignee = assignee;
 	}
 
-	public Task(Long id, @NotNull String label, @NotNull Priority priority, @NotNull Date startDate,
-			@NotNull Date endDate, @NotNull Estimation originalEstimation, Estimation remainingEstimation,
-			@NotNull Set<User> assignee) {
-		super();
-		this.id = id;
-		this.label = label;
-		this.priority = priority;
-		this.startDate = startDate;
-		this.endDate = endDate;
-		this.originalEstimation = originalEstimation;
-		this.remainingEstimation = remainingEstimation;
-		this.assignee = assignee;
-	}
-
-	public Task() {
-	}
 }

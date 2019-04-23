@@ -1,5 +1,7 @@
 package com.vermeg.services.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,5 +28,9 @@ public class UserGroupService {
 	
 	public void delete(Long id) {
 		userGroupRepository.deleteById(id);
+	}
+	
+	public List<UserGroup> getAll(){
+		return userGroupRepository.findAll();
 	}
 }

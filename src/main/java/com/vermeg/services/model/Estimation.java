@@ -22,10 +22,23 @@ public class Estimation {
 	private int day;
 	private int hour;
 
-	public Estimation(int week, int day, int hour) {
-		this.week = week;
-		this.day = day;
-		this.hour = hour;
+	@OneToOne(mappedBy = "originalEstimation")
+	private Sprint sprint;
+
+	public Task getTask() {
+		return task;
+	}
+
+	public void setTask(Task task) {
+		this.task = task;
+	}
+
+	public Sprint getSprint() {
+		return sprint;
+	}
+
+	public void setSprint(Sprint sprint) {
+		this.sprint = sprint;
 	}
 
 	public Long getId() {
@@ -57,6 +70,13 @@ public class Estimation {
 	}
 
 	public void setHour(int hour) {
+		this.hour = hour;
+	}
+
+	public Estimation(int week, int day, int hour) {
+		super();
+		this.week = week;
+		this.day = day;
 		this.hour = hour;
 	}
 

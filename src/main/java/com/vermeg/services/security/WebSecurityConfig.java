@@ -33,6 +33,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		// Entry points
 		http.authorizeRequests()//
 				.antMatchers("/api/auth/signin").permitAll().antMatchers("/api/auth/signup").permitAll()
+				.antMatchers("/swagger-ui.html").permitAll().antMatchers("/v2/api-docs").permitAll()
 				// Disallow everything else..
 				.anyRequest().authenticated();
 

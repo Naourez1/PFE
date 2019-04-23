@@ -12,8 +12,8 @@ import com.vermeg.services.services.UserService;
 @SpringBootApplication(scanBasePackages = { "com.vermeg.services" })
 public class ManagementDashboardApplication implements CommandLineRunner {
 
-	@Autowired
-	UserService userService;
+//	@Autowired
+//	UserService userService;
 
 	public static void main(String[] args) {
 		SpringApplication.run(ManagementDashboardApplication.class, args);

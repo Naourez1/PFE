@@ -1,5 +1,6 @@
 package com.vermeg.services.services;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.vermeg.services.exception.CustomException;
+import com.vermeg.services.model.Task;
 import com.vermeg.services.model.User;
 import com.vermeg.services.repository.UserRepository;
 import com.vermeg.services.security.JwtTokenProvider;
@@ -100,6 +102,10 @@ public class UserService {
 
 	public List<User> getAll() {
 		return userRepository.findAll();
+	}
+
+	public List<Task> getTasksOfUser(Long id) {
+		return userRepository.findTasksOfUser(id).orElse(Collections.<Task>emptyList());
 	}
 
 }

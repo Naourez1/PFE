@@ -51,7 +51,7 @@ public class User {
 	@ElementCollection(fetch = FetchType.EAGER)
 	private Set<Role> roles = new HashSet<>();
 
-	@ManyToMany(mappedBy = "assignee")
+	@ManyToMany(mappedBy = "assignee", fetch = FetchType.LAZY)
 	private Set<Task> tasks;
 
 	@ManyToOne

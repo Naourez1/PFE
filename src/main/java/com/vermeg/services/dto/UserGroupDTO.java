@@ -4,21 +4,15 @@ import java.util.Set;
 
 import com.vermeg.services.model.User;
 
+import io.swagger.annotations.ApiModelProperty;
+
 public class UserGroupDTO {
 
-	private Long id;
-
+	@ApiModelProperty(position = 0)
 	private String name;
 
+	@ApiModelProperty(position = 1)
 	private Set<User> users;
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
 
 	public String getName() {
 		return name;
