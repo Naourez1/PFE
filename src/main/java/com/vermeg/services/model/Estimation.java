@@ -14,10 +14,8 @@ public class Estimation {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Long id;
-
 	@OneToOne(mappedBy = "originalEstimation")
 	private Task task;
-
 	private int week;
 	private int day;
 	private int hour;

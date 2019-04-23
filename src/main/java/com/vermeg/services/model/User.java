@@ -1,8 +1,8 @@
 package com.vermeg.services.model;
-
 import java.util.HashSet;
 import java.util.Set;
-
+import javax.persistence.UniqueConstraint;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -11,8 +11,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -48,7 +51,14 @@ public class User {
 	@Size(min = 8, max = 100, message = "Minimum password length: 8 characters")
 	private String password;
 
-	@ElementCollection(fetch = FetchType.EAGER)
+	 @ManyToMany
+	  @JoinTable(
+	      name = "user_roles_t",
+	      joinColumns = @JoinColumn(name = "user_id"),
+	      inverseJoinColumns = @JoinColumn(name = "role_id"),
+	      uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "role_id"}))
+	  @OrderBy("name asc")
+	 @ElementCollection(fetch = FetchType.EAGER)
 	private Set<Role> roles = new HashSet<>();
 
 	@ManyToMany(mappedBy = "assignee")
@@ -57,6 +67,17 @@ public class User {
 	@ManyToOne
 	@JoinColumn(name = "group_id")
 	private UserGroup userGroup;
+	
+	  @OneToOne(mappedBy = "user", cascade = CascadeType.PERSIST)
+	  private UserStats userStats;
+
+	  @ManyToMany
+	  @JoinTable(
+	      name = "user_permissions_t",
+	      joinColumns = @JoinColumn(name = "user_id"),
+	      inverseJoinColumns = @JoinColumn(name = "permission_id"),
+	      uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "permission_id"}))
+	  private Set<Permission> permissions = new HashSet<>();
 
 	public User() {
 	}
