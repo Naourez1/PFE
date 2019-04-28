@@ -10,7 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,7 @@ import com.vermeg.services.exception.CustomException;
 import com.vermeg.services.model.Task;
 import com.vermeg.services.model.User;
 import com.vermeg.services.repository.UserRepository;
+import com.vermeg.services.response.JwtResponse;
 import com.vermeg.services.security.JwtTokenProvider;
 
 @Service
@@ -36,16 +39,19 @@ public class UserService {
 	@Autowired
 	private AuthenticationManager authenticationManager;
 
-	public String signin(String username, String password) {
+	public JwtResponse signin(String username, String password) {
 		try {
-			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+			Authentication authentication = authenticationManager
+					.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+			SecurityContextHolder.getContext().setAuthentication(authentication);
 			Optional<User> opUser = userRepository.findByUsername(username);
 			final User user = opUser.isPresent() ? opUser.get() : null;
 
 			if (user == null) {
 				throw new UsernameNotFoundException("User '" + username + "' not found");
 			}
-			return jwtTokenProvider.createToken(username, user.getRoles());
+			String jwt = jwtTokenProvider.createToken(username, user.getRoles());
+			return new JwtResponse(jwt, user.getUsername(), user.getRoles());
 		} catch (AuthenticationException e) {
 			throw new CustomException("Invalid username/password supplied", HttpStatus.UNPROCESSABLE_ENTITY);
 		}
