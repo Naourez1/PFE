@@ -16,7 +16,6 @@ import io.swagger.annotations.ApiModel;
 
 @Entity
 @Table(name = "absence")
-@ApiModel(description = "All details about the Absence model.")
 public class Absence {
 	@NotNull
 	@Temporal(TemporalType.TIMESTAMP)
