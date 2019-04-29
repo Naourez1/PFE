@@ -1,4 +1,4 @@
-package com.vermeg.services.response;
+package com.vermeg.services.message.response;
 
 import java.util.Collection;
 

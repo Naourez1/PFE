@@ -17,11 +17,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.vermeg.services.cofiguration.api.PrefixedRestController;
 import com.vermeg.services.dto.UserDataDTO;
 import com.vermeg.services.dto.UserResponseDTO;
+import com.vermeg.services.message.request.LoginForm;
+import com.vermeg.services.message.response.JwtResponse;
 import com.vermeg.services.model.Task;
 import com.vermeg.services.model.User;
 import com.vermeg.services.services.UserService;
@@ -45,9 +46,8 @@ public class UserController {
 	@ApiResponses(value = { //
 			@ApiResponse(code = 400, message = "Something went wrong"), //
 			@ApiResponse(code = 422, message = "Invalid username/password supplied") })
-	public ResponseEntity<?> login(@ApiParam("Username") @RequestParam String username,
-			@ApiParam("Password") @RequestParam String password) {
-		return ResponseEntity.ok(userService.signin(username, password));
+	public ResponseEntity<JwtResponse> login(@Valid @RequestBody LoginForm loginRequest) {
+		return ResponseEntity.ok(userService.signin(loginRequest.getUsername(), loginRequest.getPassword()));
 	}
 
 	@PostMapping("/auth/signup")

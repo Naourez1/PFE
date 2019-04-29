@@ -18,10 +18,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.vermeg.services.exception.CustomException;
+import com.vermeg.services.message.response.JwtResponse;
 import com.vermeg.services.model.Task;
 import com.vermeg.services.model.User;
 import com.vermeg.services.repository.UserRepository;
-import com.vermeg.services.response.JwtResponse;
 import com.vermeg.services.security.JwtTokenProvider;
 
 @Service
